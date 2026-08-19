@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group 5 - Cooperative and Savings Limited</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-indigo-700 text-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <span class="bg-white text-indigo-700 font-black px-2.5 py-1 rounded-lg text-lg">CV</span>
+        <span class="text-xl font-bold tracking-tight">Group 5 - Cooperative and Savings Limited</span>
+      </div>
+      <div class="text-right">
+        <span class="text-xs text-indigo-200 block">Personal Balance</span>
+        <span id="userBalance" class="text-lg font-bold">N500,000,000.00</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Summary Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Group Contributions</span>
+        <p id="totalGroupSavings" class="text-2xl font-black text-gray-900 mt-1">N37,312,500.00</p>
+        <span class="text-xs text-emerald-600 font-medium mt-2 inline-block">↑ +12.5% this month</span>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active Investment Returns</span>
+        <p class="text-2xl font-black text-indigo-600 mt-1">N3,171,562.50</p>
+        <span class="text-xs text-gray-500 mt-2 inline-block">Yielding 8.5% APY</span>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Next Payout Recipient</span>
+        <p class="text-2xl font-black text-emerald-600 mt-1">RoshoanRose Nigerian Limited</p>
+        <span class="text-xs text-gray-500 mt-2 inline-block">Scheduled for Oct 1, 2026</span>
+      </div>
+    </div>
+
+    <!-- Active Groups & Investments -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Group Pools -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-900">Your Cooperative Groups</h2>
+          <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+            + Create Group
+          </button>
+        </div>
+
+        <div id="groupsContainer" class="space-y-4">
+          <!-- Dynamic Groups Inserted Here -->
+        </div>
+      </div>
+
+      <!-- Quick Contribution Sidebar -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit space-y-4">
+        <h3 class="text-lg font-bold text-gray-900">Quick Contribution</h3>
+        <form id="contribForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Select Group</label>
+            <select id="groupSelect" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <!-- Options populated dynamically -->
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Amount (N)</label>
+            <input type="number" id="contribAmount" required min="1" placeholder="100.00" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+            Deposit Funds
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const groups = [
+      { id: 1, name: "Family Fund", members: 2, target: 500000, current: 289750, cycle: "Monthly Expenses" },
+      { id: 2, name: "Agric Yield", members: 8, target: 76500000, current: 68850000, cycle: "Quarterly Investment" },
+      { id: 3, name: "Fixed Deposit", members: 1, target: 100000000, current: 25000000, cycle: "Bi-Annual Savings" },
+      { id: 4, name: "Treasury Bill", members: 6, target: 12000000, current: 8000000, cycle: "Monthly Rotation" },
+      { id: 5, name: "Educational Support", members: 15, target: 5000000, current: 3750000, cycle: "Annual Donation" }
+    ];
+
+    function renderGroups() {
+      const container = document.getElementById('groupsContainer');
+      const select = document.getElementById('groupSelect');
+      
+      container.innerHTML = '';
+      select.innerHTML = '';
+
+      groups.forEach(g => {
+        const percent = Math.min(Math.round((g.current / g.target) * 100), 100);
+
+        // Populate card
+        const card = document.createElement('div');
+        card.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">${g.name}</h3>
+              <p class="text-xs text-gray-500">${g.members} Members • ${g.cycle}</p>
+            </div>
+            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full border border-indigo-100">${percent}% Funded</span>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs text-gray-600 font-medium">
+              <span>Saved: N${g.current.toLocaleString()}</span>
+              <span>Target: N${g.target.toLocaleString()}</span>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: ${percent}%"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // Populate dropdown
+        const option = document.createElement('option');
+        option.value = g.id;
+        option.textContent = g.name;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById('contribForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const groupId = parseInt(document.getElementById('groupSelect').value);
+      const amount = parseFloat(document.getElementById('contribAmount').value);
+
+      const targetGroup = groups.find(g => g.id === groupId);
+      if (targetGroup) {
+        targetGroup.current += amount;
+        renderGroups();
+        alert(`Successfully contributed $${amount} to ${targetGroup.name}!`);
+        e.target.reset();
+      }
+    });
+
+    // Initial load
+    renderGroups();
+  </script>
+</body>
+</html>

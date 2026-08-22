@@ -3,62 +3,371 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Group 5 - Cooperative and Savings Limited|Login</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 360px; }
-    h2 { text-align: center; color: #1a365d; margin-bottom: 1.5rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; }
-    input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 4px; box-sizing: border-box; }
-    button { width: 100%; padding: 0.75rem; background-color: #2b6cb0; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 1rem; }
-    button:hover { background-color: #2c5282; }
-    .footer { margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: #718096; }
-    .footer a { color: #2b6cb0; text-decoration: none; font-weight: bold; }
-    .footer a:hover { text-decoration: underline; }
-  </style>
+  <title>Group 5 - Cooperative and Savings Limited</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 font-sans text-gray-800 min-h-screen flex flex-col">
 
-  <div class="card">
-    <h2>Group 5 - Cooperative and Savings Limited|Login</h2>
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Email or Username</label>
-        <input type="text" id="email" required placeholder="member@coop.com">
+  <!-- Navbar -->
+  <nav class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="bg-white text-indigo-700 font-black px-2.5 py-1 rounded-lg text-lg">CV</span>
+        <span class="text-xl font-bold tracking-tight">Group 5 - Cooperative and Savings Limited</span>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" required placeholder="••••••••">
+
+      <!-- Navigation Tabs -->
+      <div class="flex space-x-1 md:space-x-2 bg-indigo-800 p-1 rounded-xl text-sm font-medium">
+        <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="px-3 py-1.5 rounded-lg transition bg-white text-indigo-700 shadow">Dashboard</button>
+        <button type="button" onclick="switchTab('personal-services')" id="nav-personal-services" class="px-3 py-1.5 rounded-lg transition hover:text-indigo-200">Personal Services</button>
+        <button type="button" onclick="switchTab('business-loans')" id="nav-business-loans" class="px-3 py-1.5 rounded-lg transition hover:text-indigo-200">Business Loans</button>
+        <button type="button" onclick="switchTab('top-up')" id="nav-top-up" class="px-3 py-1.5 rounded-lg transition hover:text-indigo-200">Top-up</button>
       </div>
-      <button type="submit">Sign In</button>
-    <div class="footer">
-      Don't have an account? <a href="signup.html">Create an account</a>
+
+      <!-- Balance & Toggle -->
+      <div class="flex items-center space-x-3">
+        <div class="text-right">
+          <span class="text-xs text-indigo-200 block">Wallet Balance</span>
+          <span id="userBalance" class="text-lg font-bold">N10,000,000.00</span>
+        </div>
+        <button type="button" onclick="toggleBalances()" id="toggleBtn" title="Toggle Balance Visibility" class="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
+          <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <span id="toggleText">Hide</span>
+        </button>
+      </div>
     </div>
-  </div>
-    </form>
+  </nav>
 
-  <!-- Supabase JS Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
+
+    <!-- PAGE 1: DASHBOARD -->
+    <section id="page-dashboard" class="space-y-8">
+      <!-- User Profile Box -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">User Account</span>
+          <h1 class="text-2xl font-black text-gray-900" id="dashName">Roshoan Rose</h1>
+          <p class="text-sm text-gray-500" id="dashEmail">roshoan@example.com • Member ID: #84920</p>
+        </div>
+        <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-lg text-xs text-indigo-800">
+          <span class="font-bold">Account Status:</span> Verified Member
+        </div>
+      </div>
+
+      <!-- Metrics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Balance</span>
+          <p id="metricTotalBalance" class="text-2xl font-black text-gray-900 mt-1">N0.00</p>
+          <span class="text-xs text-indigo-600 font-medium mt-2 inline-block">Combined Assets</span>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Wallet Balance</span>
+          <p id="metricWalletBalance" class="text-2xl font-black text-indigo-600 mt-1">N0.00</p>
+          <span class="text-xs text-gray-500 mt-2 inline-block">Available Liquid Funds</span>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Group Contributions</span>
+          <p id="metricGroupSavings" class="text-2xl font-black text-emerald-600 mt-1">N0.00</p>
+          <span class="text-xs text-emerald-600 font-medium mt-2 inline-block">↑ Across all services</span>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active Returns</span>
+          <p id="metricReturns" class="text-2xl font-black text-indigo-600 mt-1">N0.00</p>
+          <span class="text-xs text-gray-500 mt-2 inline-block">Yielding 8.5% APY</span>
+        </div>
+      </div>
+
+
+      <!-- Second layer -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl shadow-sm border border-gray-200" style="background-color: #60A5FA;">
+        <span class="text-xs font-semibold text-white-400 uppercase tracking-wider" style="color: white;">Savings</span>
+        <p id="totalGroupSavings" class="text-2xl font-white text-white-900 mt-1" style="color: white; font-size: 20px;">By saving, you unlock a range of diverse financial opportunities.</p>
+      </div>
+
+      <div class="p-6 rounded-xl shadow-sm border border-gray-200" style="background-color: #2563EB;">
+        <span class="text-xs font-semibold text-white-400 uppercase tracking-wider" style="color: white;">Investments</span>
+        <p class="text-2xl font-black text-white-600 mt-1" style="color: white;"></p>
+        <span class="text-xs text-gray-500 mt-2 inline-block" style="color: white;  font-size: 20px;">Coming Soon</span>
+      </div>
+
+      <div class="p-6 rounded-xl shadow-sm border border-gray-200" style="background-color: #1E3A8A;">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider" style="color: white;">Business Loans</span>
+        <p class="text-2xl font-black text-emerald-600 mt-1" style="color: white;"></p>
+        <span class="text-xs text-gray-500 mt-2 inline-block" style="color: white;  font-size: 20px;">Apply for financing to scale your business operations</span>
+      </div>
+    </div>
+    </section>
+
+
+    <!-- PAGE 2: PERSONAL SERVICES -->
+    <section id="page-personal-services" class="hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900">Personal Services</h2>
+          <p class="text-xs text-gray-500">Your registered cooperative groups and personal savings plans</p>
+        </div>
+      </div>
+
+      <div id="groupsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Dynamic Groups Inserted Here -->
+      </div>
+    </section>
+
+
+    <!-- PAGE 3: BUSINESS LOANS -->
+    <section id="page-business-loans" class="hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Business Loans</h2>
+        <p class="text-xs text-gray-500">Apply for financing to scale your business operations</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Loan Application Form</h3>
+          <form id="loanForm" class="space-y-4" onsubmit="handleLoanSubmit(event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Business Name</label>
+                <input type="text" required placeholder="e.g. RoshoanRose Ltd" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Registration Number (RC/BN)</label>
+                <input type="text" required placeholder="RC-123456" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Loan Amount Requested (N)</label>
+                <input type="number" required min="50000" placeholder="5,000,000" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Repayment Tenure</label>
+                <select class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                  <option>6 Months (5% Interest)</option>
+                  <option>12 Months (8% Interest)</option>
+                  <option>24 Months (12% Interest)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 mb-1">Purpose of Loan</label>
+              <textarea rows="3" required placeholder="Describe how the funds will be utilized..." class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+              Submit Loan Application
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Sidebar -->
+        <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100 space-y-4 h-fit">
+          <h4 class="font-bold text-indigo-900">Loan Guidelines</h4>
+          <ul class="text-xs text-indigo-800 space-y-2 list-disc list-inside">
+            <li>Must be an active member for at least 3 months.</li>
+            <li>Maximum loan amount is 3x your total group contribution balance.</li>
+            <li>Approval takes 24-48 business hours.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PAGE 4: TOP-UP -->
+    <section id="page-top-up" class="hidden space-y-6">
+      <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+        <h3 class="text-lg font-bold text-gray-900">Top-up Funds</h3>
+        <p class="text-xs text-gray-500">Deposit money into your main wallet balance or directly into any Personal Service plan.</p>
+        
+        <form id="topUpForm" class="space-y-4" onsubmit="handleTopUpSubmit(event)">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Select Destination</label>
+            <select id="groupSelect" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="wallet">Main Wallet Balance</option>
+              <!-- Dynamic groups populated here -->
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Amount (N)</label>
+            <input type="number" id="contribAmount" required min="1" placeholder="10000.00" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+            Process Top-up
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
   <script>
-    const SUPABASE_URL = "sb_publishable_c1XTfFLNc2YI-bKsRqJRHw_9ScQHsFe";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkbHZyeXViamlrdWh6cWdnaXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxNjE1MTcsImV4cCI6MjEwMjczNzUxN30.gDFFkpZmJALiynt2HZ5yi_IoQIuKtzUvz1LMF3uon_Q";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // State Data
+    const userData = {
+      name: "Roshoan Rose",
+      email: "roshoan@example.com",
+      walletBalance: 10000000.00,
+      returns: 3171562.50
+    };
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    const groups = [
+      { id: 1, name: "Family Fund", members: 2, target: 500000, current: 289750, cycle: "Monthly Expenses" },
+      { id: 2, name: "Agric Yield", members: 8, target: 76500000, current: 68850000, cycle: "Quarterly Investment" },
+      { id: 3, name: "Fixed Deposit", members: 1, target: 100000000, current: 25000000, cycle: "Bi-Annual Savings" },
+      { id: 4, name: "Treasury Bill", members: 6, target: 12000000, current: 800000, cycle: "Monthly Rotation" },
+      { id: 5, name: "Educational Support", members: 15, target: 5000000, current: 3750000, cycle: "Annual Donation" }
+    ];
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    let balancesVisible = true;
 
-      if (error) {
-        alert("Login failed: " + error.message);
-      } else {
-        alert("Login successful!");
-        window.location.href = "home.html"; // Redirect after login
+    // Helper to format currency
+    function formatCurrency(amount) {
+      if (!balancesVisible) return '••••••••';
+      return 'N' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Navigation Switcher
+    function switchTab(tabId) {
+      const pages = ['dashboard', 'personal-services', 'business-loans', 'top-up'];
+      
+      pages.forEach(p => {
+        const pageEl = document.getElementById(`page-${p}`);
+        const navBtn = document.getElementById(`nav-${p}`);
+        
+        if (pageEl) pageEl.classList.add('hidden');
+        if (navBtn) {
+          navBtn.classList.remove('bg-white', 'text-indigo-700', 'shadow');
+          navBtn.classList.add('hover:text-indigo-200');
+        }
+      });
+
+      const activePage = document.getElementById(`page-${tabId}`);
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      
+      if (activePage) activePage.classList.remove('hidden');
+      if (activeNav) {
+        activeNav.classList.add('bg-white', 'text-indigo-700', 'shadow');
+        activeNav.classList.remove('hover:text-indigo-200');
       }
-    });
+    }
+
+    // Toggle Hide/Show Balances
+    function toggleBalances() {
+      balancesVisible = !balancesVisible;
+      
+      const toggleText = document.getElementById('toggleText');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (balancesVisible) {
+        toggleText.innerText = "Hide";
+        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
+      } else {
+        toggleText.innerText = "Show";
+        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.02 10.02 0 0110.122 3.029m-1.563 3.029a9.97 9.97 0 01-1.563 3.029M3 3l18 18"/>`;
+      }
+
+      updateDashboardMetrics();
+      renderGroups();
+    }
+
+    // Render Group Cards and Select Options
+    function renderGroups() {
+      const container = document.getElementById('groupsContainer');
+      const select = document.getElementById('groupSelect');
+      
+      container.innerHTML = '';
+      select.innerHTML = '<option value="wallet">Main Wallet Balance</option>';
+
+      groups.forEach(g => {
+        const percent = Math.min(Math.round((g.current / g.target) * 100), 100);
+
+        // Populate Cards for Personal Services
+        const card = document.createElement('div');
+        card.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">${g.name}</h3>
+              <p class="text-xs text-gray-500">${g.members} Members • ${g.cycle}</p>
+            </div>
+            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full border border-indigo-100">${percent}% Funded</span>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs text-gray-600 font-medium">
+              <span>Saved: ${formatCurrency(g.current)}</span>
+              <span>Target: ${formatCurrency(g.target)}</span>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: ${percent}%"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // Populate Top-Up Options
+        const option = document.createElement('option');
+        option.value = g.id;
+        option.textContent = `Personal Service: ${g.name}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Update Dashboard Metrics calculations
+    function updateDashboardMetrics() {
+      const totalGroupContributions = groups.reduce((sum, g) => sum + g.current, 0);
+      const totalBalance = userData.walletBalance + totalGroupContributions + userData.returns;
+
+      document.getElementById('dashName').textContent = userData.name;
+      document.getElementById('dashEmail').textContent = `${userData.email} • Member ID: #84920`;
+
+      document.getElementById('userBalance').textContent = formatCurrency(userData.walletBalance);
+      document.getElementById('metricWalletBalance').textContent = formatCurrency(userData.walletBalance);
+      document.getElementById('metricGroupSavings').textContent = formatCurrency(totalGroupContributions);
+      document.getElementById('metricReturns').textContent = formatCurrency(userData.returns);
+      document.getElementById('metricTotalBalance').textContent = formatCurrency(totalBalance);
+    }
+
+    // Top-up Form Action
+    function handleTopUpSubmit(e) {
+      e.preventDefault();
+      const selectedVal = document.getElementById('groupSelect').value;
+      const amount = parseFloat(document.getElementById('contribAmount').value);
+
+      if (selectedVal === 'wallet') {
+        userData.walletBalance += amount;
+        alert(`Successfully topped up ${formatCurrency(amount)} to your Main Wallet!`);
+      } else {
+        const targetGroup = groups.find(g => g.id === parseInt(selectedVal));
+        if (targetGroup) {
+          targetGroup.current += amount;
+          alert(`Successfully topped up ${formatCurrency(amount)} to ${targetGroup.name}!`);
+        }
+      }
+
+      updateDashboardMetrics();
+      renderGroups();
+      e.target.reset();
+    }
+
+    // Loan Submission Handler
+    function handleLoanSubmit(e) {
+      e.preventDefault();
+      alert('Your business loan application has been submitted successfully! We will review it within 24 hours.');
+      e.target.reset();
+    }
+
+    // Initial Load
+    renderGroups();
+    updateDashboardMetrics();
   </script>
 </body>
 </html>
